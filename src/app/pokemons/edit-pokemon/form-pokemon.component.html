@@ -1,0 +1,191 @@
+<form
+  #pokemonForm="ngForm"
+  class="center container"
+  (ngSubmit)="savePokemonState()"
+>
+  <div class="col s12 m8">
+    <h2 class="header center">{{ pokemon.name }}</h2>
+    <div class="card horizontal hoverable">
+      <div class="card-stacked">
+        <div class="card-content">
+          <table class="borderer striped">
+            <tbody>
+              <tr>
+                <td>Image</td>
+                <td>
+                  <div class="input-field col s12">
+                    <input
+                      id="picture"
+                      name="picture"
+                      type="url"
+                      required
+                      [(ngModel)]="pokemon.picture"
+                      #picture="ngModel"
+                    />
+                    <div
+                      [hidden]="picture.valid || picture.pristine"
+                      class="card-panel red accent-1"
+                    >
+                      Le lien de l'image est requis
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>Nom</td>
+                <td>
+                  <div class="input-field col s12">
+                    <input
+                      type="text"
+                      name="name"
+                      id="name"
+                      required
+                      pattern="^[a-zA-zàéèç]{1,25}"
+                      [(ngModel)]="pokemon.name"
+                      #name="ngModel"
+                    />
+                    <div
+                      [hidden]="name.valid || name.pristine"
+                      class="card-panel red accent-1"
+                    >
+                      Le nom du pokémon est requis (1-25)
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>Rareté</td>
+                <td>
+                  <div class="input-field col s12">
+                    <input
+                      id="rarity"
+                      name="rarity"
+                      type="text"
+                      required
+                      [value]="pokemon.rarity"
+                      pattern="^[*]{1,6}$"
+                      [(ngModel)]="pokemon.rarity"
+                      #rarity="ngModel"
+                    />
+                    <div
+                      [hidden]="rarity.valid || rarity.pristine"
+                      class="card-panel red accent-1"
+                    >
+                      La rareté doit être renseignée (1-6)
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>Point de vie</td>
+                <td>
+                  <div class="input-field col s12">
+                    <input
+                      type="text"
+                      name="hp"
+                      id="hp"
+                      required
+                      pattern="^(?:[1-9]\d?|[1]\d{2}|200)$"
+                      [(ngModel)]="pokemon.hp"
+                      #hp="ngModel"
+                    />
+                    <div
+                      [hidden]="hp.valid || hp.pristine"
+                      class="card-panel red accent-1"
+                    >
+                      Les points de vie sont requis (1-299)
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>Dégats</td>
+                <td>
+                  <div class="input-field col s12">
+                    <input
+                      type="text"
+                      name="cp"
+                      id="cp"
+                      required
+                      pattern="^(?:[1-9]\d?|[1]\d{2}|200)$"
+                      [(ngModel)]="pokemon.cp"
+                      #cp="ngModel"
+                    />
+                    <div
+                      [hidden]="cp.valid || cp.pristine"
+                      class="card-panel red accent-1"
+                    >
+                      Les dégats sont requis (1-299)
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>Types</td>
+                <td>
+                  <div *ngFor="let type of types" class="row">
+                    <label>
+                      <input
+                        type="checkbox"
+                        id="{{ type }}"
+                        class="filled-in validate"
+                        [value]="type"
+                        [checked]="hasType(type)"
+                        [disabled]="!isTypesValid(type)"
+                        (change)="selectType($event, type)"
+                      />
+                      <span [attr.for]="type">
+                        <div class="{{ type | pokemonTypeColor }}">
+                          {{ type }}
+                        </div>
+                      </span>
+                    </label>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>Dates de création</td>
+                <td>
+                  <div class="input-field col s12">
+                    <input
+                      id="created"
+                      name="created"
+                      type="date"
+                      [ngModel]="pokemon.created | date : 'yyyy-MM-dd'"
+                      (ngModelChange)="pokemon.created = $event"
+                      #created="ngModel"
+                    />
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="card horizontal center">
+      <div class="card-action">
+        <a class="waves-effect waves-light btn" (click)="back()"
+          >Direction Pokedex</a
+        >
+      </div>
+      <div class="card-action">
+        <button
+          type="submit"
+          class="waves-effect btn"
+          [disabled]="!pokemonForm.form.valid"
+        >
+          Save
+        </button>
+      </div>
+      <div class="card-action">
+        <button
+          class="waves-effect red btn"
+          (click)="deletePokemon(pokemon.id)"
+        >
+          Delete
+        </button>
+      </div>
+    </div>
+  </div>
+</form>
